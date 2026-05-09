@@ -1,73 +1,136 @@
-# Getting Started with Create React App
+# 🎓 PMP Questions UI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based frontend for practicing **Project Management Professional (PMP)** exam questions. Connects to the [pmpquestionservice](https://github.com/sulthanmubaraksyed/pmpquestionservice) backend API to serve, filter, and track your exam practice sessions.
 
-## Environment Configuration
+---
 
-### Setting up the PMP Service URL
+## 🖥️ What It Does
 
-The app uses environment variables to configure the backend service URL. Create a `.env` file in the root directory:
+- Browse and answer PMP practice questions filtered by **Process Group**, **Knowledge Area**, or **PM Tool/Technique**
+- Submit answers and get instant feedback (correct ✅ / incorrect ❌)
+- Navigate forward/backward through questions
+- Track your score per **Process Group** in real time
+- Mark questions as valid/invalid (admin feature)
+- Edit question content via the Edit dialog (admin role)
+- Retrieve a specific question by ID
+- Debug view for inspecting loaded question state
+
+---
+
+## 🏗️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 18 + TypeScript |
+| UI Components | Material UI (MUI) v5 |
+| Styling | CSS Modules |
+| Build Tool | Create React App |
+| Backend | PMP Question Service REST API |
+
+---
+
+## 📁 Project Structure
+
+```
+pmpquestions-ui/
+├── src/
+│   ├── components/
+│   │   ├── AnswerOptions/         # A/B/C/D radio options + Submit/Prev/Next buttons
+│   │   ├── ProcessGroupSelector/  # Dropdown: Initiating, Planning, Executing, etc.
+│   │   ├── KnowledgeAreaSelector/ # Dropdown: Integration, Scope, Risk, etc.
+│   │   ├── ToolSelector/          # Filter by PM tool/technique
+│   │   ├── ProcessGroupScores/    # Real-time score display per process group
+│   │   ├── QuestionValidityToggle/# Mark questions valid/invalid
+│   │   ├── EditResponseDialog/    # Admin: edit question content
+│   │   ├── RetrieveQuestionDialog/# Fetch a specific question by ID
+│   │   ├── ScoreDisplay.tsx       # Score summary component
+│   │   └── DebugDialog/           # Debug: inspect loaded question data
+│   ├── config/
+│   │   ├── appConfig.ts           # Batch size, thresholds config
+│   │   ├── toolsarray.ts          # Full PM tools list
+│   │   └── validTools.ts          # Valid tool filters
+│   ├── utils/
+│   │   ├── questionManager.ts     # State machine for question loading/navigation
+│   │   └── questionService.ts     # API calls to the backend service
+│   ├── types/
+│   │   └── index.ts               # TypeScript interfaces
+│   └── App.tsx                    # Root component with all state and logic
+├── env.example                    # Environment variable template
+└── public/
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js >= 16
+- The [pmpquestionservice](https://github.com/sulthanmubaraksyed/pmpquestionservice) backend running on port `3030`
+
+### Installation
 
 ```bash
-# Copy the example environment file
+git clone https://github.com/sulthanmubaraksyed/pmpquestions-ui.git
+cd pmpquestions-ui
+npm install
+```
+
+### Environment Setup
+
+```bash
 cp env.example .env
-
-# Edit the .env file with your service URL
-REACT_APP_PMP_SERVICE_URL=http://localhost:3030
 ```
 
-### Available Environment Variables
+Edit `.env`:
+```env
+REACT_APP_PMP_SERVICE_URL=http://localhost:3030
+REACT_APP_API_KEY=pmp_service_key_2024
+```
 
-- `REACT_APP_PMP_SERVICE_URL`: The URL of your PMP backend service (defaults to `http://localhost:3030`)
-- `REACT_APP_API_KEY`: Your API key for authentication (required for service calls)
-
-### Environment File Structure
+### Run
 
 ```bash
-# .env
-REACT_APP_PMP_SERVICE_URL=http://localhost:3030
-REACT_APP_API_KEY=your_actual_api_key_here
+npm start
 ```
 
-## Available Scripts
+Opens at **http://localhost:3000**
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🎮 How to Use
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. **Select filters** — choose a Process Group, Knowledge Area, or Tool (mutually exclusive)
+2. **Read the question** — displayed in the question area
+3. **Pick an answer** — select A, B, C, or D
+4. **Submit** — see instant green (correct) or red (incorrect) feedback
+5. **Navigate** — use Previous / Next to move through questions
+6. **Track scores** — the right panel shows your score per PMP process group
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Admin Features
+- **Validity Toggle** — mark a question as valid or invalid
+- **Retrieve** button — opens Edit dialog to modify question content
+- **Debug** button — inspect raw question data loaded in memory
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## ⚙️ Configuration
 
-### `npm run build`
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `MIN_QUESTIONS_THRESHOLD` | 15 | Min questions before fetching more |
+| `BATCH_SIZE` | 5 | Questions fetched per batch |
+| `ADDITIONAL_RECORDS_ON_SUBMIT` | 2 | Extra questions added on each submit |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🔗 Related Repositories
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **[pmpquestionservice](https://github.com/sulthanmubaraksyed/pmpquestionservice)** — Local backend API
+- **[awspmpquestionservice](https://github.com/sulthanmubaraksyed/awspmpquestionservice)** — AWS Lambda backend
+- **[awspmpquestionui](https://github.com/sulthanmubaraksyed/awspmpquestionui)** — AWS-deployed UI version
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 📝 License
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+ISC
